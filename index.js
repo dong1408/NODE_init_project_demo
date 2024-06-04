@@ -1,26 +1,33 @@
-require('dotenv').config(); 
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import mysql from 'mysql2';
 
-const http = require('http');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const hostname = '127.0.0.1';
-const port = process.env.PORT || 3000;
-
-const server = http.createServer((req, res) => {
-  if (req.url === '/' && req.method === 'GET') {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello, World!\n');
-  } else if (req.url === '/about' && req.method === 'GET') {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('About Page\n');
-  } else {
-    res.statusCode = 404;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Not Found\n');
-  }
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: ''
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+connection.connect((error) => {
+    if (error) {
+        console.error('Error connecting to MySQL:', error);
+        return;
+    }
+    console.log('Connected to MySQL');
+});
+
+app.get('/info', (req, res) => {
+    res.json({status: 'Success', data: {1:'abcbc', 2: 'anncn'}});
+});
+
+app.post('login/', (req, res) => {
+
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on PORT ${PORT}`);
 });
